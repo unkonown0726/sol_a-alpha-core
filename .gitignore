@@ -205,3 +205,53 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# --- OSごみ ---
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --- 仮想環境 / キャッシュ ---
+.venv/
+venv/
+ENV/
+env/
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.pyre/
+ruff_cache/
+.ipynb_checkpoints/
+
+# --- ビルド/配布 ---
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# --- IDE ---
+.vscode/
+.idea/
+*.code-workspace
+
+# --- カバレッジ/ログ ---
+.coverage
+htmlcov/
+*.log
+
+# --- このプロジェクト固有（事故防止） ---
+# サンプル以外の“実カード”や秘密鍵は上げない
+cards/*.signed.json
+cards/local/
+card_secret.hex
+ck_secret.hex
+*.key
+*.pem
+*.p12
+*.crt
+
+# もし作るならローカル用シークレット置き場は無視
+secrets/
+.sola/

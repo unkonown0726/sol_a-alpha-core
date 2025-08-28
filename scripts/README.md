@@ -84,9 +84,9 @@ scripts/README (plain text)
   netsh advfirewall firewall add rule name="Block Python Out" dir=out action=block program="$py" enable=yes | Out-Null
   netsh advfirewall firewall add rule name="Block Python In"  dir=in  action=block program="$py" enable=yes | Out-Null
   python scripts\run_strict.py cards\my_card.signed.json
-  - 解除:
-  - netsh advfirewall firewall delete rule name="Block Python Out"
-  -  netsh advfirewall firewall delete rule name="Block Python In"
+ - 解除:
+ ・netsh advfirewall firewall delete rule name="Block Python Out"
+ ・netsh advfirewall firewall delete rule name="Block Python In"
 
 ────────────────────────────────────────────────────────
   # [ 安全チェック（任意。貼って実行するだけ） ]
@@ -104,20 +104,20 @@ scripts/README (plain text)
 
 ────────────────────────────────────────────────────────
  # FAQ（雑だけど役に立つ）
-────────────────────────────────────────────────────────
- - Q. 鍵を作ってないのに動かない。
- - A. 正しい。鍵が無いと署名できない→strictは起動しない（安全側）。[1]から。
+──────────────────────────────────────────────────────── 
+   Q. 鍵を作ってないのに動かない。
+   A. 正しい。鍵が無いと署名できない→strictは起動しない（安全側）。[1]から。
 
- - Q. 署名済みファイルや鍵をコミットしちゃった。
- - A. すぐ外す:
+   Q. 署名済みファイルや鍵をコミットしちゃった。
+   A. すぐ外す:
      git rm --cached -r .sola cards/*.signed.json card_secret.hex ck_secret.hex
      git commit -m "purge secrets"
    その後で鍵を作り直す（[1]）。
 
- - Q. 何をコミットして良いの？
- - A. cards/my_card.json（未署名）だけ。あとはコードとREADME。以上。
+   Q. 何をコミットして良いの？
+   A. cards/my_card.json（未署名）だけ。あとはコードとREADME。以上。
 
- - 作者へのお願い（雑に重要）:
-   - ・鍵と署名済みカードはリポに絶対入れない
-   - ・Dockerの --network=none を使う（なければFWブロック）
-   - ・困ったらこのREADMEをそのまま貼り直す（だいたい治る）
+   作者へのお願い（雑に重要）:
+     ・鍵と署名済みカードはリポに絶対入れない
+     ・Dockerの --network=none を使う（なければFWブロック）
+     ・困ったらこのREADMEをそのまま貼り直す（だいたい治る）

@@ -1,0 +1,8 @@
+// cards/my_card.json
+{
+  "meta":{"name":"be_kind","version":"1.0","namespace":"behavior",
+          "valid_from":"2025-01-01T00:00:00Z","valid_to":"2026-01-01T00:00:00Z",
+          "alg":"HMAC-SHA256","sig":""},
+  "caps":{"net_allowed":false},
+  "policy":{"priority":10}
+}

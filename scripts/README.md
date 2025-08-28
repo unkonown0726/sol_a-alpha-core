@@ -14,15 +14,15 @@ scripts/README (plain text)
   - 未署名カード: cards/my_card.json（このファイルだけコミットしてOK）
 
 ────────────────────────────────────────────────────────
-[ 1 ] 初回だけ “鍵” を作る（ローカルに保存）
+# [ 1 ] 初回だけ “鍵” を作る（ローカルに保存）
 ────────────────────────────────────────────────────────
 
-macOS / Linux:
+ # macOS / Linux:
   mkdir -p ~/.sola
   openssl rand -hex 32 > ~/.sola/card_secret.hex    # カード署名用
   openssl rand -hex 32 > ~/.sola/ck_secret.hex      # チェックポイント署名用
 
-Windows (PowerShell):
+ # Windows (PowerShell):
   New-Item -ItemType Directory "$env:USERPROFILE\.sola" -Force | Out-Null
   $r=[System.Security.Cryptography.RandomNumberGenerator]::Create()
   function New-HexKey($p){$b=New-Object byte[] 32;$r.GetBytes($b);($b|%{ $_.ToString('x2') }) -join ''|Out-File -NoNewline $p}
@@ -32,54 +32,54 @@ Windows (PowerShell):
 ※ これらの鍵は “あなたのPC内” にだけ置く。リポに入れない。
 
 ────────────────────────────────────────────────────────
-[ 2 ] DEVICE_ID をセット（端末バインド）
+# [ 2 ] DEVICE_ID をセット（端末バインド）
 ────────────────────────────────────────────────────────
 
-macOS / Linux:
+ # macOS / Linux:
   export DEVICE_ID="$(cat /etc/machine-id 2>/dev/null || ioreg -rd1 -c IOPlatformExpertDevice | awk -F'\"' '/IOPlatformUUID/{print $4}')"
 
-Windows (PowerShell):
+ # Windows (PowerShell):
   $env:DEVICE_ID=(Get-CimInstance Win32_ComputerSystemProduct).UUID
 
 ────────────────────────────────────────────────────────
-[ 3 ] カードに署名（入力→出力のパスは固定）
+# [ 3 ] カードに署名（入力→出力のパスは固定）
 ────────────────────────────────────────────────────────
 
-入力:  cards/my_card.json           ← 未署名テンプレ（コミットしてよいのはコレだけ）
-出力:  cards/my_card.signed.json    ← 署名済み（コミット禁止）
+ # 入力:  cards/my_card.json           ← 未署名テンプレ（コミットしてよいのはコレだけ）
+ # 出力:  cards/my_card.signed.json    ← 署名済み（コミット禁止）
 
-macOS / Linux:
+ # macOS / Linux:
   python scripts/sign_card.py --secret ~/.sola/card_secret.hex \
     --in cards/my_card.json --out cards/my_card.signed.json \
     --device-lock "$DEVICE_ID"
 
-Windows (PowerShell):
+ # Windows (PowerShell):
   python scripts\sign_card.py --secret $env:USERPROFILE\.sola\card_secret.hex `
     --in cards\my_card.json --out cards\my_card.signed.json `
     --device-lock "$env:DEVICE_ID"
 
 ────────────────────────────────────────────────────────
-[ 4 ] ネット遮断で実行（Docker --network=none）
+# [ 4 ] ネット遮断で実行（Docker --network=none）
 ────────────────────────────────────────────────────────
 
-macOS / Linux:
+ # macOS / Linux:
   docker run --rm --network=none \
     -e DEVICE_ID="$DEVICE_ID" -e SOLA_HOME="/secrets" \
     -v "$HOME/.sola":/secrets:ro -v "$PWD":/app -w /app python:3.11 \
     python scripts/run_strict.py cards/my_card.signed.json
 
-Windows (PowerShell):
+ # Windows (PowerShell):
   docker run --rm --network=none `
     -e DEVICE_ID="$env:DEVICE_ID" -e SOLA_HOME="/secrets" `
     -v "$env:USERPROFILE\.sola":/secrets:ro `
     -v "$PWD":/app -w /app python:3.11 `
     python scripts/run_strict.py cards/my_card.signed.json
 
-成功サイン（ログに出る文字）:
+ # 成功サイン（ログに出る文字）:
   card strict-activate: True
   checkpoint signed: True
 
-※ Dockerが無い場合（Windowsだけの応急処置）:
+ # ※ Dockerが無い場合（Windowsだけの応急処置）:
   $py=(Get-Command python).Source
   netsh advfirewall firewall add rule name="Block Python Out" dir=out action=block program="$py" enable=yes | Out-Null
   netsh advfirewall firewall add rule name="Block Python In"  dir=in  action=block program="$py" enable=yes | Out-Null
@@ -89,21 +89,21 @@ Windows (PowerShell):
   # netsh advfirewall firewall delete rule name="Block Python In"
 
 ────────────────────────────────────────────────────────
-[ 安全チェック（任意。貼って実行するだけ） ]
+  # [ 安全チェック（任意。貼って実行するだけ） ]
 ────────────────────────────────────────────────────────
 
-A) いまステージに危ない物が無いか（OKが出れば安全）
+ # A) いまステージに危ない物が無いか（OKが出れば安全）
   macOS/Linux/Git Bash:
     git status --porcelain | grep -E "(\.sola|\.signed\.json|card_secret\.hex|ck_secret\.hex)" || echo "OK: nothing sensitive staged"
   Windows PowerShell:
     $m = git status --porcelain | Select-String -Pattern '\.sola|\.signed\.json|card_secret\.hex|ck_secret\.hex'
     if ($m) { $m; 'WARNING: sensitive staged' } else { 'OK: nothing sensitive staged' }
 
-B) .gitignore が効いてるか（無視ルールが表示されればOK）
+ # B) .gitignore が効いてるか（無視ルールが表示されればOK）
   git check-ignore -v .sola/ cards/my_card.signed.json card_secret.hex ck_secret.hex
 
 ────────────────────────────────────────────────────────
-FAQ（雑だけど役に立つ）
+ # FAQ（雑だけど役に立つ）
 ────────────────────────────────────────────────────────
 Q. 鍵を作ってないのに動かない。
 A. 正しい。鍵が無いと署名できない→strictは起動しない（安全側）。[1]から。

@@ -84,9 +84,9 @@ Windows (PowerShell):
   netsh advfirewall firewall add rule name="Block Python Out" dir=out action=block program="$py" enable=yes | Out-Null
   netsh advfirewall firewall add rule name="Block Python In"  dir=in  action=block program="$py" enable=yes | Out-Null
   python scripts\run_strict.py cards\my_card.signed.json
-  # 解除:
-  # netsh advfirewall firewall delete rule name="Block Python Out"
-  # netsh advfirewall firewall delete rule name="Block Python In"
+   解除:
+   netsh advfirewall firewall delete rule name="Block Python Out"
+   netsh advfirewall firewall delete rule name="Block Python In"
 
 ────────────────────────────────────────────────────────
 [ 安全チェック（任意。貼って実行するだけ） ]

@@ -1,8 +1,37 @@
-CARDS GOVERNANCE — 運用ミニルール（ネットなし前提）
+CARDS GOVERNANCE — 運用ルール（最小）
 
-- 命名: <namespace>/<name>@<version>
-- 同一namespaceは同時装着1枚（mutex）。研究モードのみ複数試験可。
-- 署名: HMAC-SHA256 / secret / 期限 / device_lock を満たさないカードは起動拒否（fail-closed）。
+目的
+- 事故らないための最低限の約束事。研究で壊すのは自由だが、配布は節度。
+
+命名 / namespace
+- 形式: <namespace>/<name>@<version>
+- 例: behavior/be_kind@1.0, tutor/math_basic@0.9
+- 同一namespaceは同時装着1枚（mutex）。LAB_STRICTのみ実験的な複数装着を許可。
+
+署名 / 期限 / 端末バインド
+- alg = HMAC-SHA256（厳格）。未知アルゴは拒否。
+- secret 必須、sig 非空、検証成功、valid_from/valid_to 内、device_lock 一致。
+- どれか欠けたら起動拒否（fail-closed）。
+
+権限
+- caps.net_allowed は既定 false。カード側で明示されても、プロファイル/環境によっては最終的に無効化される。
+- 可能なら能力ごと（read_calendar, control_camera 等）に分割し、最小権限で配布。
+
+互換テスト
+- SPEC準拠（state往復, geo≒strict 誤差 等）を満たすこと。
+- 追加でカード単体テストを推奨（動作/権限/境界条件）。tests/ を利用。
+
+バージョニング
+- 破壊的変更: メジャーを上げる（1.x→2.0）。
+- 互換変更: マイナーを上げる（1.0→1.1）。
+
+禁止事項
+- 署名済みカードのリポジトリ配布（鍵漏洩と同義）
+- 個人情報の平文格納
+- 永続ネット依存の強制（ローカルで落ちるべき）
+
+免責
+- 本リポはカード実装の安全性を保証しない。配布・運用は各自の責任。
 
 注記（ネット権限について）:
 - 本コアはネットワーク機能を実装していないため、カード側の net_allowed フラグは無視される。

@@ -16,7 +16,7 @@ core/README (plain text)
 
   Profile:
     - MOBILE, DESKTOP: strictジオメトリは拒否。ネット/LTM禁止が既定。
-    - LAB_STRICT: strict許可（研究専用）。本番で使わないこと。
+    - LAB_STRICT: strict許可（研究専用）。本番非推奨。
 
   GeometryS:
     - dist(q1, q2, mode="geo") -> (distance, d_norm, info)

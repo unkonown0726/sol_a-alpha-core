@@ -1,0 +1,100 @@
+sol-α core v5.2.2 — Local AI core
+三本柱: 思考の可視化 / 完全ローカル駆動 / 三権分立（core・SLM・cards）
+
+
+[1] これ何 / Three pillars
+- 思考の可視化（Auditability）:
+  応答に機械可読の METRICS コメントを埋め込み、必要に応じて内部トレースを開示できる。
+- 完全ローカル駆動（Security/Privacy by design）:
+  既定でネットワーク・外部DB・外部APIを使わない。外部送信なし。
+- 三権分立（責任分離）:
+  core: 意味生成と更新則（G）。SLM: 入出力の自然化。cards: 役割と権限の枠。責任の所在を分離。
+
+
+[2] 特徴（できること）
+- ローカルのみで対話を生成（状態を保持するステートフル設計）
+- 意味空間S(4軸)の距離: line / geo / strict（geoが既定）
+- 進化法則G: 安定志向の更新（実装済み）
+- METRICS埋め込み + トレース（開発者向け）
+- 役割カード（署名必須 / fail-closed）。研究モードでの複数装着に対応
+
+[3] クイックスタート（最短）
+前提: Python 3.11
+
+  PYTHONPATH=. pytest -q
+  python core/wise_partner_core_v52_plus.py
+
+（動けば METRICS コメントと簡易出力が見える）
+
+[4] プロファイル
+- MOBILE / DESKTOP : 既定。研究向け機能は一部無効化（完全ローカル）
+- LAB_STRICT       : 研究専用。strict距離などの重い機能を許可（外部通信はそもそも未実装）
+
+[5] 思考の可視化（METRICS / トレース）
+- 応答文字列のどこかに:
+    <!--METRICS success=0.55 trust=0.60 stress=0.45 reality=0.70-->
+- 監査ログ/直近イベント/滲みの表示（実装がある場合）:
+    例: examples/audit_demo.py を参照
+  環境変数で監査ON（任意）:
+    macOS/Linux:  export WPCORE_AUDIT=1
+    Windows PS:   $env:WPCORE_AUDIT=1
+
+[6] 永続人格（stateの保存/復元）
+- 保存（canonical JSON + hash）:
+    s = agent.export_state()  → state.json
+- 復元:
+    agent.import_state(open("state.json", encoding="utf-8").read())
+- 往復でバイト等価になる（hash不一致は例外）
+
+[7] 距離（GEOM）
+- モード:
+    line  : とても速い / 粗い
+    geo   : 既定。速度と精度のバランス
+    strict: 研究専用（RK4 + Γ再評価）。重い
+- 正規化距離 d_norm = d / d(ref)。学習スケールと閾値は d_norm を使用
+- 詳細: GEOM/README を参照
+
+[8] 役割カード（strictは研究専用 / fail-closed）
+- 未署名のテンプレは cards/ に置く。署名済み（*.signed.json）はコミット禁止（.gitignoreで遮断）
+- 起動条件（満たさなければ拒否 / fail-closed）:
+    HMAC-SHA256 / secret必須 / sig非空 / 期限内 / device_lock一致
+- 複数装着:
+    同一namespaceは基本1枚（mutex）。LAB_STRICTでのみ実験的緩和。優先度で排他
+- 詳細: cards/README を参照
+
+[9] セキュリティ（完全ローカル / 鍵・署名）
+- 本リポはネット/外部DB/外部APIを実装しない
+- 署名鍵や署名済みカードはリポに含めない（.sola/ や *.signed.json は .gitignore 済み）
+- 失効（任意運用）: cards/REVOKED.txt に列挙 → 実行前チェックで拒否
+
+[10] ディレクトリ構成
+  core/       本体（Agent / GeometryS / Profile）
+  GEOM/       距離モジュール（strictは研究専用）
+  adapters/   I/O雛形（外部通信は未実装）
+  scripts/    署名・実行のローカル手順（研究用途）
+  cards/      未署名カード（テンプレのみコミット）
+  examples/   簡易サンプル（監査デモ等）
+  bench/      速度/精度ベンチ
+  tests/      仕様テスト（pytest）
+  docs/       理論・設計・運用文書・今後の展望など（FOUNDING-PRINCIPLES 等）
+  SPEC.md     互換仕様
+
+[11] 付録（ベンチ/テスト/例）
+- 速度:
+    PYTHONPATH=. python bench/speed_strict.py
+- 近似誤差（geo vs strict, 目標 MAPE ≤ 8%）:
+    PYTHONPATH=. python bench/acc_geo_vs_strict.py
+- 仕様テスト:
+    PYTHONPATH=. pytest -q
+- 監査デモ:
+    python examples/audit_demo.py   （必要なら WPCORE_AUDIT=1）
+
+[12] ドキュメント索引 / ライセンス
+- docs/FOUNDING-PRINCIPLES.md  … 三本柱の詳細
+- GEOM/README                   … 距離モードの使い分け
+- core/API-DETAILS.md           … 公開APIの詳細
+- cards/README                  … 署名/起動の実務
+- SECURITY.md                   … 最小の安全方針
+
+
+License: Apache-2.0

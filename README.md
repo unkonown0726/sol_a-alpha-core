@@ -67,17 +67,18 @@ sol-α core v5.2.2 — Local AI core
 - 署名鍵や署名済みカードはリポに含めない（.sola/ や *.signed.json は .gitignore 済み）
 - 失効（任意運用）: cards/REVOKED.txt に列挙 → 実行前チェックで拒否
 
-[10] ディレクトリ構成
-  core/       本体（Agent / GeometryS / Profile）
-  GEOM/       距離モジュール（strictは研究専用）
-  adapters/   I/O雛形（外部通信は未実装）
-  scripts/    署名・実行のローカル手順（研究用途）
-  cards/      未署名カード（テンプレのみコミット）
-  examples/   簡易サンプル（監査デモ等）
-  bench/      速度/精度ベンチ
-  tests/      仕様テスト（pytest）
-  docs/       理論・設計・運用文書・今後の展望など（FOUNDING-PRINCIPLES 等）
-  SPEC.md     互換仕様
+[10] ディレクトリ構成<br>
+
+  core/       本体（Agent / GeometryS / Profile）<br>
+  GEOM/       距離モジュール（strictは研究専用）<br>
+  adapters/   I/O雛形（外部通信は未実装）<br>
+  scripts/    署名・実行のローカル手順（研究用途）<br>
+  cards/      未署名カード（テンプレのみコミット）<br>
+  examples/   簡易サンプル（監査デモ等）<br>
+  bench/      速度/精度ベンチ<br>
+  tests/      仕様テスト（pytest）<br>
+  docs/       理論・設計・運用文書・今後の展望など（FOUNDING-PRINCIPLES 等）<br>
+  SPEC.md     互換仕様<br>
 
 [11] 付録（ベンチ/テスト/例）
 - 速度:
@@ -94,7 +95,11 @@ sol-α core v5.2.2 — Local AI core
 - GEOM/README                   … 距離モードの使い分け
 - core/API-DETAILS.md           … 公開APIの詳細
 - cards/README                  … 署名/起動の実務
-- SECURITY.md                   … 最小の安全方針
+- POLICY.md                   … 最小の安全方針
 
+適正利用（要約）:
+本プロジェクトおよび派生物を、違法行為、他者への危害、差別/嫌がらせ、プライバシー侵害・監視、サイバー不正（マルウェア/不正アクセス等）、誤情報/なりすまし、高リスク領域での無責任運用（医療/法務/金融/重要インフラ等）、安全機構の回避（署名/期限/端末ロックの無効化）に使用しないでください。**軍事・防衛・情報機関での利用（兵器開発、標的選定/誘導、戦闘・作戦支援、広域監視を含む）を禁止**します。  
+本プロジェクトの細則は各自の責任で遵守してください。
 
 License: Apache-2.0
+

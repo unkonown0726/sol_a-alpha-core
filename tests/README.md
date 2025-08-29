@@ -19,4 +19,21 @@ tests/README (plain text)
     PYTHONPATH=. pytest -q -s -k uncertain
 
 CI:
-  .github/workflows/ci.yml が push/PR で自動実行（鍵操作は一切しない構成推奨）
+  .github/workflows/ci.yml が push/PR で自動実行（鍵操作は一切しない構成推奨）<br>
+
+  Manual probes (optional):<br>
+
+  macOS / Linux:<br>
+
+  export WPCORE_AUDIT=1
+python examples/audit_demo.pyexport WPCORE_AUDIT=1<br>
+※OFFに戻す: unset WPCORE_AUDIT<br>
+
+Windows (PowerShell):<br>
+
+$env:WPCORE_AUDIT=1
+python examples\audit_demo.py$env:WPCORE_AUDIT=1<br>
+※OFFに戻す: Remove-Item Env:WPCORE_AUDIT
+
+
+  

@@ -58,7 +58,8 @@ strict の中身（数式少なめ版）:
   -  PYTHONPATH=. python bench/acc_geo_vs_strict.py
   -  PYTHONPATH=. pytest -q tests/test_conformance.py
 
-FAQ（超短縮）:
+FAQ（超短縮）:<br>
+
   Q. strict で“Γを中で再評価”って必要？<br>
   A. 必要。評価しないとRK4の利点が死に、収束が悪化する（ここは修正済み）。<br>
 

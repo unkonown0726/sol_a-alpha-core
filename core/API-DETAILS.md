@@ -136,7 +136,7 @@ METRICS タグ（契約）:
   - 破壊的変更は minor を上げる（例: v5.3.*）。export_state の version で判定可能
 
 最低限の作法（本番の心得）:
-  - ネット/LTMは既定でOFF。必要でも“明示スイッチ＋READMEに手順”で。
+  - ネット/LTMは既定でOFF。必要な人は自己責任で。
   - 署名鍵と署名済みカードはリポに入れない（.gitignoreで遮断済み）
   - LAB_STRICTは研究専用。ユーザー配布は DESKTOP/MOBILE 限定で。
 
